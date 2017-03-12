@@ -7,8 +7,6 @@ import { Entities, initialEntities } from '../entity/entity.model';
 export function reducer(state: Entities<Contact> = initialEntities<Contact>({ selectedEntityId: 21 }, 'Contact', actions, initialContact),
   action: actions.Actions): Entities<Contact> {
 
-  // console.log(JSON.stringify(action))
-
   switch (action.type) {
     case state.actionTypes.Add:
     case state.actionTypes.AddSuccess:
@@ -21,10 +19,8 @@ export function reducer(state: Entities<Contact> = initialEntities<Contact>({ se
       return state.deleteEntity(action);
     case state.actionTypes.Select:
       return state.selectEntity(action);
-    case state.actionTypes.Next:
-      let ix = 1 + state.ids.indexOf(state.selectedEntityId);
-      if (ix >= state.ids.length) { ix = 0; }
-      return Object.assign({}, state, { selectedEntityId: state.ids[ix] });
+    case state.actionTypes.SelectNext:
+      return state.selectNext(action);
     default:
       return state;
   }

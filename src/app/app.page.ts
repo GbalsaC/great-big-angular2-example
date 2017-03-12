@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import * as fromRoot from './core/store/';
-import * as layoutActions from './core/store/layout/layout.actions';
+import * as actions from './core/store/layout/layout.actions';
 import * as sessionActions from './core/store/session/session.actions';
 import { entityNames } from './core/store/util'
 
@@ -47,11 +47,11 @@ export class AppPage {
      * updates and user interaction through the life of our
      * application.
      */
-    this.store.dispatch(new layoutActions.CloseSidenav());
+    this.store.dispatch(new actions.Update(entityNames.LAYOUT, ['booksPage', 'showSidenav'], false));
   }
 
   openSidenav() {
-    this.store.dispatch(new layoutActions.OpenSidenav(null, entityNames.LAYOUT));
+    this.store.dispatch(new actions.Update(entityNames.LAYOUT, ['booksPage', 'showSidenav'], true));
   }
 
   loginUser(credentials) {

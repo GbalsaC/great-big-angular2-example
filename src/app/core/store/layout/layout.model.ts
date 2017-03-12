@@ -1,8 +1,14 @@
 import { getActionTypes } from '../util';
+import { Branch } from '../branch/branch.model';
+import { entityNames } from '../util';
 
 export interface BooksPageLayout {
   showSidenav: boolean;
 };
+
+export const initialBooksPageLayout = {
+  showSidenav: false
+}
 
 export interface BerniePageLayout {
   editable: boolean;
@@ -13,14 +19,6 @@ export interface BerniePageLayout {
 
 export interface HeroesDashboardLayout {
   heroSearchTerm: string
-}
-
-export interface Layout {
-  booksPage: BooksPageLayout;
-  berniePage: BerniePageLayout;
-  heroesDashboardPage: HeroesDashboardLayout;
-  msg: string;
-  actionTypes: any;
 }
 
 export const initialBerniePage: BerniePageLayout = {
@@ -44,16 +42,17 @@ export const initialHeroesDashboardPage = {
   heroSearchTerm: ''
 }
 
+export class Layout extends Branch {
+  booksPage: BooksPageLayout;
+  berniePage: BerniePageLayout;
+  heroesDashboardPage: HeroesDashboardLayout;
+  msg: string;
 
-export function initialLayout(vals: any = {}, entityTypeName?: string, actionNames?: any, initialEntity?): Layout {
-
-  return {
-    booksPage: {
-      showSidenav: false
-    },
-    berniePage: initialBerniePage,
-    heroesDashboardPage: initialHeroesDashboardPage,
-    msg: '',
-    actionTypes: getActionTypes(entityTypeName, actionNames),
+  constructor(actionNames: any) {
+    super(entityNames.LAYOUT, actionNames);
+    this.booksPage = initialBooksPageLayout;
+    this.berniePage = initialBerniePage;
+    this.heroesDashboardPage = initialHeroesDashboardPage;
+    this.msg = '';
   }
 }

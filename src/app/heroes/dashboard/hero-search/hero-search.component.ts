@@ -43,7 +43,7 @@ export class HeroSearchComponent implements OnInit, OnDestroy {
       .debounceTime(300)        // wait 300ms after each keystroke before considering the term
       .distinctUntilChanged()   // ignore if next search term is same as previous
       .subscribe(term => {
-        this.store.dispatch(new actions.SearchForHero({ term }));
+        this.store.dispatch(new actions.Update(entityNames.LAYOUT, ['heroesDashboardPage', 'heroSearchTerm'], term));
       })
   }
 

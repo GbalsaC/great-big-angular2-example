@@ -4,8 +4,11 @@ import { Book } from './book.model';
 import * as book from './book.actions';
 import * as collection from '../collection/collection.actions';
 import { Entities, initialEntities } from '../entity/entity.model';
+import * as actions from './book.actions';
+import { entityNames } from '../util';
 
-export function reducer(state = initialEntities<Book>(),
+export function reducer(state: Entities<Book> = initialEntities<Book>({},
+  entityNames.BOOK, actions, {}),
   action: book.Actions | collection.Actions): Entities<Book> {
   switch (action.type) {
     case book.ActionTypes.SEARCH_COMPLETE:

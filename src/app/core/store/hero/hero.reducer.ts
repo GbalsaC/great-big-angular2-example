@@ -3,11 +3,10 @@ import { createSelector } from 'reselect';
 import { Hero, initialHero } from './hero.model';
 import * as actions from './hero.actions';
 import { Entities, initialEntities } from '../entity/entity.model';
+import { entityNames } from '../util';
 
-export function reducer(state: Entities<Hero> = initialEntities<Hero>({}, 'Hero', actions, initialHero),
+export function reducer(state: Entities<Hero> = initialEntities<Hero>({}, entityNames.HERO, actions, initialHero),
   action: actions.Actions): Entities<Hero> {
-
-  // console.log(JSON.stringify(action))
 
   switch (action.type) {
     case state.actionTypes.Add:

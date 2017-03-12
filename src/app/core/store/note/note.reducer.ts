@@ -3,8 +3,9 @@ import { createSelector } from 'reselect';
 import { Note, initialNote } from './note.model';
 import * as actions from './note.actions';
 import { Entities, initialEntities } from '../entity/entity.model';
+import { entityNames } from '../util';
 
-export function reducer(state: Entities<Note> = initialEntities<Note>({}, 'Note', actions, initialNote),
+export function reducer(state: Entities<Note> = initialEntities<Note>({}, entityNames.NOTE, actions, initialNote),
   action: actions.Actions): Entities<Note> {
 
   switch (action.type) {

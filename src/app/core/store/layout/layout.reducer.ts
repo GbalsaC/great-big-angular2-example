@@ -1,53 +1,15 @@
-import { createSelector } from 'reselect';
 import * as layoutActions from './layout.actions';
-import * as contactActions from '../contact/contact.actions';
-import * as claimActions from '../claim/claim.actions';
-import { Layout, initialLayout, BerniePageLayout, initialBerniePage } from './layout.model';
+import { Layout } from './layout.model';
 
-export function reducer(state: Layout = initialLayout({}, 'Layout', layoutActions, initialLayout), action: layoutActions.Actions | contactActions.Actions | claimActions.Actions): Layout {
-
-  // console.log(JSON.stringify(action))
-
+export function reducer(state: Layout = new Layout(layoutActions), action: layoutActions.Actions): Layout {
 
   switch (action.type) {
-    case state.actionTypes.CloseSidenav:
-      return Object.assign({}, state, { booksPage: { showSidenav: false } });
-
-    case state.actionTypes.OpenSidenav:
-      return Object.assign({}, state, { booksPage: { showSidenav: true } });
-
-    case state.actionTypes.SearchForHero:
-      return Object.assign({}, state, {
-        heroesDashboardPage: Object.assign({},
-          state.heroesDashboardPage,
-          { heroSearchTerm: (<any>action).payload.term })
-      });
-
-    case state.actionTypes.ToggleEditable:
-      return Object.assign({}, state, {
-        berniePage: Object.assign({},
-          initialBerniePage, // this is so that the methods are not lost
-          state,
-          { editable: (<any>action).payload })
-      });
-
-    case state.actionTypes.ToggleAllRebuttals:
-      return Object.assign({}, state, {
-        berniePage: Object.assign({}, initialBerniePage,
-          state,
-          { expanded: (<any>action).payload })
-      });
-
-    case state.actionTypes.Load:
-      return Object.assign({}, state, {
-        msg: 'Loading contacts ...'
-      });
-
-    case state.actionTypes.UpdateSuccess:
-      return Object.assign({}, state, {
-        msg: 'Saved ' + (<any>action).payload.name
-      });
-
+    case state.actionTypes.Update:
+      return Object.assign({}, state, state.update(action));
+    // case state.actionTypes.Load:
+    //   return Object.assign({}, state, {
+    //     msg: 'Loading contacts ...'
+    //   });
     default:
       return state;
   }

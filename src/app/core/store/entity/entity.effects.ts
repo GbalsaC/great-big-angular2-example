@@ -12,7 +12,8 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/startWith';
 
-import * as actions from './entity.actions';
+import * as entityActions from './entity.actions';
+import * as branchActions from '../branch/branch.actions';
 import { typeFor } from '../util';
 import { DataService } from '../../services/data.service';
 
@@ -30,12 +31,12 @@ export class EntityEffects<T> {
   load$(action$, entityName, actions, branch) {
     return action$
       .ofType(typeFor(entityName, actions.ActionNames.LOAD))
-      .startWith(new actions.Load(null, entityName))
+      .startWith(new entityActions.Load(null, entityName))
       .switchMap(() =>
         this.dataService.getEntities(branch)
           .mergeMap(fetchedEntities => Observable.from(fetchedEntities))
-          .map((fetchedEntity) => new actions.LoadSuccess(fetchedEntity, entityName))  // one action per entity
-          .catch(() => Observable.of(new actions.AddUpdateFail(null, entityName)))
+          .map((fetchedEntity) => new entityActions.LoadSuccess(fetchedEntity, entityName))  // one action per entity
+          .catch(() => Observable.of(new entityActions.AddUpdateFail(null, entityName)))
       );
   }
 
@@ -47,8 +48,8 @@ export class EntityEffects<T> {
         Observable
           .from((<any>entities).ids)
           .filter((id: string) => (<any>entities).entities[id].dirty)
-          .switchMap((id: string) => this.dataService.addOrUpdateEntity((<any>entities).entities[id], entityName))
-          .map((responseEntity) => new actions.UpdateSuccess(responseEntity, entityName))
+          .switchMap((id: string) => this.dataService.addOrUpdate((<any>entities).entities[id], entityName))
+          .map((responseEntity) => new entityActions.UpdateSuccess(responseEntity, entityName))
       );
   }
 }

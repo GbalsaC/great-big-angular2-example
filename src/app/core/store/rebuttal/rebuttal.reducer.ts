@@ -6,21 +6,10 @@ import { Observable } from 'rxjs/Observable';
 import { Rebuttal, initialRebuttal } from './rebuttal.model';
 import * as actions from './rebuttal.actions';
 import { Entities, initialEntities } from '../entity/entity.model';
+import { entityNames } from '../util';
 
 export function reducer(state: Entities<Rebuttal> = initialEntities<Rebuttal>({},
-  'Rebuttal', actions, initialRebuttal), action: actions.Actions): Entities<Rebuttal> {
-
-  let edits = {};
-  switch (action.type) {
-    case state.actionTypes.MakeRebuttalEditable:
-      edits = { editing: true }; break;
-    case state.actionTypes.CancelChanges:
-    case state.actionTypes.SaveRebuttal:
-      edits = { editing: false }; break;
-    default:
-      edits = {};
-  }
-  action.payload && (action.payload = Object.assign(action.payload, edits));
+  entityNames.REBUTTAL, actions, initialRebuttal), action: actions.Actions): Entities<Rebuttal> {
 
   switch (action.type) {
     case state.actionTypes.Add:

@@ -6,7 +6,7 @@
 
 ## Background and Motivation
 
-This project is an attempt by an unemployed non-college-student to infer from available demos what the codebase might
+This project is an attempt by an unemployed DIY-student to infer from available demos what the codebase might
 look like for the real-world, commercial codebases that you don't get to see until you are hired by a real company and
 sign and NDA.
 
@@ -19,9 +19,8 @@ The rationale behind this is pretty simple...
     because corners have probably been cut, it's probably been simplified and it probably doesn't 
     show you the exact way anyone does it on a real job. The difference between exact and almost 
     exact is huge. Tutorials show you how you *can* use a feature of the technology but often they 
-    do so in situations when in real life you would not do things that way. I call these cases 
-    instructional red herrings. Instructional Red Herrings are very expensive, timewise. It's just 
-    as important to know how to use a technology's features as it is to know when.
+    do so in situations when in real life you would not do things that way. This can cost a lot of 
+    time. It's just as important to know how to use a technology's features as it is to know when.
     3. If you want to know how fast a big Angular app will build, run and test before investing
     the time to learn Angular - and you should - then you need source code for a big app before
     you even write Hello World.
@@ -29,6 +28,8 @@ The rationale behind this is pretty simple...
     commit to using it, there's no better way than to see a complex example made with that technology.
     5. Making architectural decisions or convention decisions is a whole lot easier when you have
     a complete application with all of its edge cases to illuminate the consequences.
+    6. By containing edge and corner cases, a big application will quickly answer the common learner's
+    question: "Why isn't this done the easy way I think it should be done?"
 
 Hopefully, when the project is done it will make the learning process for others much easier and prepare them to
 make real things rather than instructional ones. I expect it to reduce the time to implement your own real
@@ -94,12 +95,13 @@ I use `auth.guard.ts` instead of `auth-guard.service.ts`. I use `books.routing.t
 
 That's it. It shouldn't be too hard to remember these, and in return you will have consistent, short, expressive file names.
 
-## Blocking Angular bugs
+## Blocking Dependency Issues
 
 | Issue | Description | Features |
 | :-- | :-- | :-- |
 | [14480](https://github.com/angular/angular/issues/14480) | Angular 2 relative pathing from siblings doesn't work | Compose Message box on Crisis Center and login success routing |
 | [14201](https://github.com/angular/angular/pull/14201) | Duplicate instantiation of lazy loaded modules | ngrx Effects |
+| [3781](https://github.com/angular/angular-cli/issues/3781) | Cannot read property 'newLine' of undefined | Travis build |
 
 ## Prerequisites
 

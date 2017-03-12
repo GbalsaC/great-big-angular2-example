@@ -1,5 +1,6 @@
 import * as commonActions from '../entity/entity.actions';
 import { getActionTypes } from '../util';
+import { EntityAction } from './entity.actions';
 
 export interface Entities<T> {
   ids: string[];
@@ -13,22 +14,11 @@ export interface Entities<T> {
   updateAllEntities: Function;
   addLoadEntity: Function;
   selectEntity: Function;
+  selectNext: Function;
   getData: Function;
 };
 
-
-export let typeCache: { [label: string]: boolean } = {};
-export function type<T>(label: T | ''): T {
-  if (typeCache[<string>label]) {
-    throw new Error(`Action type "${label}" is not unique"`);
-  }
-
-  typeCache[<string>label] = true;
-
-  return <T>label;
-}
-
-export function initialEntities<T>(vals: any = {}, entityTypeName?: string, actionNames?: any, initialEntity?): Entities<T> {
+export function initialEntities<T>(vals: any = {}, entityTypeName: string, actionNames: any, initialEntity): Entities<T> {
 
   return Object.assign({
     ids: [],
@@ -45,26 +35,22 @@ export function initialEntities<T>(vals: any = {}, entityTypeName?: string, acti
      */
     deleteEntity: function (action: commonActions.Update<T>): Entities<T> {
       let entities = Object.assign({}, this.entities);
-      delete entities[action.payload['id']];
+      delete entities[action.payload.id];
       let selectedEntityId = this.ids.indexOf(this.selectedEntityId) > -1 ? null : this.selectedEntityId;
-      let i = this.ids.findIndex(id => id == action.payload['id']);
+      let i = this.ids.findIndex(id => id == action.payload.id);
       let ids = [...this.ids.slice(0, i), ...this.ids.slice(i + 1)];
       return Object.assign({}, this, { entities, ids, selectedEntityId });
     },
 
     updateEntity: function (action: commonActions.Update<T>): Entities<T> {
       let entities = Object.assign({}, this.entities);
-      entities[action.payload['id']] =
-        Object.assign({},
-          entities[action.payload['id']],
-          this.reduceOne(this, entities[action.payload['id']], action))
+      entities[action.payload.id] = this.reduceOne(this, entities[action.payload.id], action);
       return Object.assign({}, this, {
         ids: Object.keys(entities),
         entities: entities
       });
     },
 
-    // this only fires with ToggleAllRebuttals, so skip making an UpdateAllEntities action for now
     updateAllEntities: function (action: any): Entities<T> {
       let id: string;
       let entities = Object.assign({}, this.entities);
@@ -78,7 +64,7 @@ export function initialEntities<T>(vals: any = {}, entityTypeName?: string, acti
 
     addLoadEntity: function (action: commonActions.Add<T> | commonActions.Load<T>): Entities<T> {
       let entities = Object.assign({}, this.entities);
-      entities[action.payload['id']] = Object.assign({}, this.reduceOne(this, null, action));
+      entities[action.payload.id] = this.reduceOne(this, null, action);
       return Object.assign({}, this, {
         ids: Object.keys(entities),
         entities: entities,
@@ -89,17 +75,23 @@ export function initialEntities<T>(vals: any = {}, entityTypeName?: string, acti
 
     selectEntity: function (action: commonActions.Select<T>): Entities<T> {
       return Object.assign({}, this, {
-        selectedEntityId: action.payload['id']
+        selectedEntityId: action.payload.id
       });
     },
 
-    reduceOne: function (state, entity: T = null, action: any): T {  //TODO: would be nice if this wasn't any
+    selectNext: function (action: commonActions.SelectNext<T>): Entities<T> {
+      let ix = 1 + this.ids.indexOf(this.selectedEntityId);
+      if (ix >= this.ids.length) { ix = 0; }
+      return Object.assign({}, this, { selectedEntityId: this.ids[ix] });
+    },
+
+    reduceOne: function (state: Entities<T>, entity: T = null, action: EntityAction<T>): T {
       switch (action.type) {
 
         case state.actionTypes.Add:
-          return Object.assign({}, action.payload, { dirty: true });
+          return Object.assign({}, initialEntity, action.payload, { dirty: true });
         case state.actionTypes.Update:
-          if (entity['id'] == action.payload['id']) {
+          if (entity['id'] == action.payload.id) {
             return Object.assign({}, entity, action.payload, { dirty: true });
           } else {
             return entity;
@@ -108,8 +100,8 @@ export function initialEntities<T>(vals: any = {}, entityTypeName?: string, acti
         case state.actionTypes.LoadSuccess:
           return Object.assign({}, initialEntity, action.payload, { dirty: false });
         case state.actionTypes.UpdateSuccess:
-          if (entity['id'] == action.payload['id']) {
-            return Object.assign({}, action.payload, { dirty: false });
+          if (entity['id'] == action.payload.id) {
+            return Object.assign({}, entity, action.payload, { dirty: false });
           } else {
             return entity;
           }

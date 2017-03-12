@@ -13,7 +13,7 @@ import { Action } from '@ngrx/store';
 export let typeCache: { [label: string]: boolean } = {};
 export function type<T>(label: T | ''): T {
   if (typeCache[<string>label]) {
-    throw new Error(`Action type "${label}" is not unqiue"`);
+    throw new Error(`Action type "${label}" is not unique"`);
   }
 
   typeCache[<string>label] = true;
@@ -46,15 +46,3 @@ export const entityNames = {
   NOTE: 'Note',
   REBUTTAL: 'Rebuttal'
 }
-
-export class BaseAction<T> implements Action {
-  _name: string = 'BASE ACTION - THIS SHOULD NOT APPEAR. YOU MUST FIRST SET TYPE';
-  get type() {
-    return typeFor(this.entityName, this._name)
-  }
-  set type(type) {
-    this._name = type;
-  }
-  constructor(public payload: any, public entityName: string) { }
-}
-

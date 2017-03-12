@@ -13,16 +13,16 @@ export function reducer(state = initialEntities<Claim>({}, 'Claim', claimActions
   action: claimActions.Actions | layoutActions.Actions): Entities<Claim> {
   let entities = {};
 
-  let edits = {};
-  switch (action.type) {
-    case state.actionTypes.ReorderRebuttals:
-      edits = { rebuttalsReordered: true }; break;
-    case state.actionTypes.ToggleRebuttals:
-      edits = { expanded: !action.payload.expanded }; break;
-    default:
-      edits = {};
-  }
-  action.payload && (action.payload = Object.assign(action.payload, edits));
+  // let edits = {};
+  // switch (action.type) {
+  //   // case state.actionTypes.ReorderRebuttals:
+  //   //   edits = { rebuttalsReordered: true, rebuttalIds }; break;
+  //   case state.actionTypes.ToggleRebuttals:
+  //     edits = { expanded: !action.payload.expanded }; break;
+  //   default:
+  //     edits = {};
+  // }
+  // action.payload && (action.payload = Object.assign(action.payload, edits));
 
   switch (action.type) {
     case state.actionTypes.Add:
@@ -30,12 +30,11 @@ export function reducer(state = initialEntities<Claim>({}, 'Claim', claimActions
     case state.actionTypes.LoadSuccess:
       return state.addLoadEntity(action);
     // make the same change to every entity
-    case state.actionTypes.ToggleAllRebuttals:
+    case state.actionTypes.updateAllEntities:
       return state.updateAllEntities(action);
-    case state.actionTypes.ReorderClaims:
-      return Object.assign({}, state, { ids: action.payload });
-    case state.actionTypes.ReorderRebuttals:
-    case state.actionTypes.ToggleRebuttals:
+    // case state.actionTypes.ReorderRebuttals:
+    // case state.actionTypes.ToggleRebuttals:
+    case state.actionTypes.Update:
       return state.updateEntity(action);
     default: {
       return state;

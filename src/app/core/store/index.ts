@@ -279,7 +279,17 @@ export const getDeepClaims = createSelector(getClaimEntities, getClaimIds, getRe
               .filter(cr => cr.claimId == cid)
               .sort((a, b) => a.sortOrder - b.sortOrder)
               .map(cr => {
-                return rebuttals[cr.rebuttalId];
+                return {
+                  claimRebuttalId: cr.id,
+                  id: rebuttals[cr.rebuttalId].id,
+                  shortName: rebuttals[cr.rebuttalId].shortName,
+                  longName: rebuttals[cr.rebuttalId].longName,
+                  comments: rebuttals[cr.rebuttalId].comments,
+                  editing: rebuttals[cr.rebuttalId].editing,
+                  isNew: rebuttals[cr.rebuttalId].isNew,
+                  isTouched: rebuttals[cr.rebuttalId].isTouched,
+                  link: rebuttals[cr.rebuttalId].link
+                };
               })
           } // TODO: the AssociateRebuttal action should create a new rebuttal or have you pick one.
         )

@@ -9,8 +9,7 @@ import * as actions from './claim-rebuttal.actions';
 import { Entities, initialEntities } from '../entity/entity.model';
 
 
-export function reducer(state = initialEntities<ClaimRebuttal>({}, 'Rebuttal', actions, initialClaimRebuttal),  // For this one we just need Entities.entities, not Entities.ids
-  action: actions.Actions): Entities<ClaimRebuttal> {
+export function reducer(state: Entities<ClaimRebuttal> = initialEntities<ClaimRebuttal>({}, 'ClaimRebuttal', actions, initialClaimRebuttal), action: actions.Actions): Entities<ClaimRebuttal> {
   let entities = {};
   let id: string;
   let edits = {};

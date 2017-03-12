@@ -29,8 +29,8 @@ export class DataService {
       .catch(this.handleError);
   }
 
-  getEntities(branch: string): Observable<any[]> {
-    return this.http.get(`${BASE_URL}/${branch}`)
+  getEntities(table: string): Observable<any[]> {
+    return this.http.get(`${BASE_URL}/${table}`)
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -41,7 +41,7 @@ export class DataService {
       .map((r: Response) => r.json());
   }
 
-  addOrUpdateEntity(entity: any, entityName): Observable<any> {
+  addOrUpdate(entity: any, entityName): Observable<any> {
     return this.http.post(`${BASE_URL}/${entityName}`, this.prepareRecord(entity), this.JSON_HEADER)
       .map(this.extractData)
       .catch(this.handleError);
